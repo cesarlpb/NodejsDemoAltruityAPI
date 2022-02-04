@@ -1,0 +1,2588 @@
+openapi: 3.0.1
+info:
+  title: Altruity Workplace Giving API
+  description: Altruity Workplace Giving API that requires an API Key.
+  termsOfService: https://www.myaltruity.com/terms-of-use/
+  version: v1
+servers:
+- url: /
+security:
+- Bearer: []
+- Basic: []
+- Donate: []
+tags:
+- name: Charity Data
+  description: APIs to search our Charity database.
+paths:
+  /api/v1/CharityData/CharitySearch:
+    get:
+      tags:
+      - Charity Data
+      summary: Submit search criteria to retrieve a list of matching charities. Submit
+        requests to the other Charity Data methods for additional filter criteria.
+      description: APIs to search our Charity database.
+      operationId: apiV1CharityDataCharitySearchGET
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CharitiesSearchRequest'
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharityDataSearchResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharityDataSearchResponse'
+        "404":
+          description: No matching charities found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharityDataSearchResponse'
+      x-swagger-router-controller: CharityData
+  /api/v1/CharityData/SpotlightedCharities:
+    get:
+      tags:
+      - Charity Data
+      summary: Returns a list of spotlighted charities that have been pre-configured
+        for the owner of the Altruity API Key.
+      description: Returns a list of spotlighted charities that have been pre-configured
+        for the owner of the Altruity API Key.
+      operationId: apiV1CharityDataSpotlightedCharitiesGET
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharityDataSearchResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharityDataSearchResponse'
+        "404":
+          description: No spotlighted charities found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharityDataSearchResponse'
+      x-swagger-router-controller: CharityData
+  /api/v1/CharityData/StatesForSearch:
+    get:
+      tags:
+      - CharityData
+      summary: Returns a list of U.S. States that can be used for Charity Search filtering.
+      operationId: apiV1CharityDataStatesForSearchGET
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharityDataSearchResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharityDataSearchResponse'
+      x-swagger-router-controller: CharityData
+  /api/v1/CharityData/MissionCategoriesForSearch:
+    get:
+      tags:
+      - CharityData
+      summary: Returns a list of standardized mission categories that can be used
+        for Charity Search filtering.
+      operationId: apiV1CharityDataMissionCategoriesForSearchGET
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharityDataSearchResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharityDataSearchResponse'
+      x-swagger-router-controller: CharityData
+  /api/v1/Employee:
+    post:
+      tags:
+      - Employee
+      summary: Creates a new employee for workplace giving.
+      operationId: apiV1EmployeePOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeCreateRequest'
+      responses:
+        "201":
+          description: Returns the Altruity ID of the newly created employee.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeCreateResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeCreateResponse'
+      x-swagger-router-controller: Employee
+  /api/v1/Employee/{employee_uid}:
+    get:
+      tags:
+      - Employee
+      summary: Retrieve an existing employee.
+      operationId: apiV1EmployeeEmployee_uidGET
+      parameters:
+      - name: employee_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeGetResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeGetResponse'
+        "404":
+          description: The record was not found using the supplied payroll system
+            unique ID or Altruity ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeGetResponse'
+      x-swagger-router-controller: Employee
+    put:
+      tags:
+      - Employee
+      summary: Update an existing employee. Partial data is allowed because incoming
+        blank values will not replace existing values.
+      operationId: apiV1EmployeeEmployee_uidPUT
+      parameters:
+      - name: employee_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: See sample request.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeUpdateRequest'
+      responses:
+        "200":
+          description: Update was successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeUpdateResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeUpdateResponse'
+        "404":
+          description: The record was not found using the supplied payroll system
+            unique ID or Altruity ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeUpdateResponse'
+      x-swagger-router-controller: Employee
+    delete:
+      tags:
+      - Employee
+      summary: Delete an existing employee.
+      operationId: apiV1EmployeeEmployee_uidDELETE
+      parameters:
+      - name: employee_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Delete successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeDeleteResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeDeleteResponse'
+        "404":
+          description: The record was not found using the supplied payroll system
+            unique ID or Altruity ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeDeleteResponse'
+      x-swagger-router-controller: Employee
+  /api/v1/Employee/{employee_uid}/DonationBasket:
+    get:
+      tags:
+      - Employee
+      summary: Retrieves the current Donation Basket for the employee.
+      operationId: apiV1EmployeeEmployee_uidDonationBasketGET
+      parameters:
+      - name: employee_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeDonationBasketGetResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeDonationBasketGetResponse'
+        "404":
+          description: No active Gift Basket was found for the employee.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeDonationBasketGetResponse'
+      x-swagger-router-controller: Employee
+    post:
+      tags:
+      - Employee
+      summary: An employee Donation Basket is a combination of 1 to 5 charity ID and
+        donation amount pairings. The minimum donation amount per charity is $5.
+      operationId: apiV1EmployeeEmployee_uidDonationBasketPOST
+      parameters:
+      - name: employee_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: See sample below.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeDonationBasketCreateRequest'
+      responses:
+        "201":
+          description: Returns the Altruity ID of the newly created record.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeDonationBasketCreateResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeDonationBasketCreateResponse'
+      x-swagger-router-controller: Employee
+  /api/v1/Employee/{employee_uid}/DonationBasket/{donationBasket_AltruityID}:
+    delete:
+      tags:
+      - Employee
+      summary: Delete the current employee Donation Basket.
+      operationId: apiV1EmployeeEmployee_uidDonationBasketDonationBasket_AltruityIDDELETE
+      parameters:
+      - name: employee_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: donationBasket_AltruityID
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Delete successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeDonationBasketDeleteResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeDonationBasketDeleteResponse'
+        "404":
+          description: The record was not found using the supplied payroll system
+            unique ID or Altruity ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeDonationBasketDeleteResponse'
+      x-swagger-router-controller: Employee
+  /api/v1/Employer:
+    post:
+      tags:
+      - Employer
+      summary: Creates a new employer for workplace giving.
+      operationId: apiV1EmployerPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployerCreateRequest'
+      responses:
+        "201":
+          description: Returns the Altruity ID of the newly created employer and a
+            URI to Get the employer.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployerCreateResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployerCreateResponse'
+      x-swagger-router-controller: Employer
+  /api/v1/Employer/{employer_uid}:
+    get:
+      tags:
+      - Employer
+      summary: Retrieve an existing employer.
+      operationId: apiV1EmployerEmployer_uidGET
+      parameters:
+      - name: employer_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployerGetResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployerGetResponse'
+        "404":
+          description: The record was not found using the supplied payroll system
+            unique ID or Altruity ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployerGetResponse'
+      x-swagger-router-controller: Employer
+    put:
+      tags:
+      - Employer
+      summary: Update an existing employer. Partial data is allowed because incoming
+        blank values will not replace existing values.
+      operationId: apiV1EmployerEmployer_uidPUT
+      parameters:
+      - name: employer_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: See sample request.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployerUpdateRequest'
+      responses:
+        "200":
+          description: Update was successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseEmployerResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseEmployerResponse'
+        "404":
+          description: The record was not found using the supplied payroll system
+            unique ID or Altruity ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseEmployerResponse'
+      x-swagger-router-controller: Employer
+    delete:
+      tags:
+      - Employer
+      summary: Delete an existing employer.
+      operationId: apiV1EmployerEmployer_uidDELETE
+      parameters:
+      - name: employer_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Delete successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseEmployerResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseEmployerResponse'
+        "404":
+          description: The record was not found using the supplied payroll system
+            unique ID or Altruity ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseEmployerResponse'
+      x-swagger-router-controller: Employer
+  /api/v1/Employer/{employer_uid}/PayrollAdmin:
+    post:
+      tags:
+      - Employer
+      summary: Creates a new administrator for an existing employer. Any existing
+        administrator record will be end-dated.
+      operationId: apiV1EmployerEmployer_uidPayrollAdminPOST
+      parameters:
+      - name: employer_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayrollAdminCreateRequest'
+      responses:
+        "201":
+          description: Returns the Altruity ID of the newly created record.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollAdminCreateResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollAdminCreateResponse'
+      x-swagger-router-controller: Employer
+  /api/v1/Employer/{employer_uid}/PayrollAdmin/{payrollAdmin_uid}:
+    get:
+      tags:
+      - Employer
+      summary: Retrieve the active administrator for an employer.
+      operationId: apiV1EmployerEmployer_uidPayrollAdminPayrollAdmin_uidGET
+      parameters:
+      - name: employer_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: payrollAdmin_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollAdminGetResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollAdminGetResponse'
+        "404":
+          description: The record was not found using the supplied payroll system
+            unique ID or Altruity ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollAdminGetResponse'
+      x-swagger-router-controller: Employer
+    put:
+      tags:
+      - Employer
+      summary: Update an existing administrator. Partial data is allowed because incoming
+        blank values will not replace existing values.
+      operationId: apiV1EmployerEmployer_uidPayrollAdminPayrollAdmin_uidPUT
+      parameters:
+      - name: employer_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: payrollAdmin_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: See sample request.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayrollAdminUpdateRequest'
+      responses:
+        "200":
+          description: Update was successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollAdminUpdateResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollAdminUpdateResponse'
+        "404":
+          description: The record was not found using the supplied payroll system
+            unique ID or Altruity ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollAdminUpdateResponse'
+      x-swagger-router-controller: Employer
+    delete:
+      tags:
+      - Employer
+      summary: Delete an administrator record.
+      operationId: apiV1EmployerEmployer_uidPayrollAdminPayrollAdmin_uidDELETE
+      parameters:
+      - name: employer_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: payrollAdmin_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Delete successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollAdminDeleteResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollAdminDeleteResponse'
+        "404":
+          description: The record was not found using the supplied payroll system
+            unique ID or Altruity ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollAdminDeleteResponse'
+      x-swagger-router-controller: Employer
+  /api/v1/Employer/{employer_uid}/PayrollSchedule:
+    post:
+      tags:
+      - Employer
+      summary: Creates a new payroll schedule for an existing employer.
+      operationId: apiV1EmployerEmployer_uidPayrollSchedulePOST
+      parameters:
+      - name: employer_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayrollScheduleCreateRequest'
+      responses:
+        "201":
+          description: Returns the Altruity ID of the newly created record.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollScheduleCreateResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollScheduleCreateResponse'
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollScheduleCreateResponse'
+      x-swagger-router-controller: Employer
+  /api/v1/Employer/{employer_uid}/PayrollSchedule/{payrollSchedule_uid}:
+    get:
+      tags:
+      - Employer
+      summary: Retrieve all active payroll schedules for an employer.
+      operationId: apiV1EmployerEmployer_uidPayrollSchedulePayrollSchedule_uidGET
+      parameters:
+      - name: employer_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: payrollSchedule_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollScheduleGetResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollScheduleGetResponse'
+        "404":
+          description: The record was not found using the supplied payroll system
+            unique ID or Altruity ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollScheduleGetResponse'
+      x-swagger-router-controller: Employer
+    put:
+      tags:
+      - Employer
+      summary: Update an existing payroll schedule record. Partial data is allowed
+        because incoming blank values will not replace existing values.
+      operationId: apiV1EmployerEmployer_uidPayrollSchedulePayrollSchedule_uidPUT
+      parameters:
+      - name: employer_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: payrollSchedule_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayrollScheduleUpdateRequest'
+      responses:
+        "200":
+          description: Update was successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollScheduleUpdateResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollScheduleUpdateResponse'
+        "404":
+          description: The record was not found using the supplied payroll system
+            unique ID or Altruity ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollScheduleUpdateResponse'
+      x-swagger-router-controller: Employer
+    delete:
+      tags:
+      - Employer
+      summary: Delete a payroll schedule record.
+      operationId: apiV1EmployerEmployer_uidPayrollSchedulePayrollSchedule_uidDELETE
+      parameters:
+      - name: employer_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: payrollSchedule_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Delete successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollScheduleDeleteResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollScheduleDeleteResponse'
+        "404":
+          description: The record was not found using the supplied payroll system
+            unique ID or Altruity ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollScheduleDeleteResponse'
+      x-swagger-router-controller: Employer
+  /api/v1/Employer/{employer_uid}/EnrolledEmployees:
+    get:
+      tags:
+      - Employer
+      summary: Retrieve all employees enrolled in workplace giving.
+      operationId: apiV1EmployerEmployer_uidEnrolledEmployeesGET
+      parameters:
+      - name: employer_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployerEmployeesGetResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployerEmployeesGetResponse'
+        "404":
+          description: The record was not found using the supplied payroll system
+            unique ID or Altruity ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployerEmployeesGetResponse'
+      x-swagger-router-controller: Employer
+  /api/v1/Employer/{employer_uid}/GivingData:
+    get:
+      tags:
+      - Employer
+      summary: Retrieve summary giving data for the employer.
+      operationId: apiV1EmployerEmployer_uidGivingDataGET
+      parameters:
+      - name: employer_uid
+        in: path
+        description: Provide the unique ID from your system or the Altruity ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployerGivingDataGetResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployerGivingDataGetResponse'
+        "404":
+          description: The record was not found using the supplied payroll system
+            unique ID or Altruity ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployerGivingDataGetResponse'
+      x-swagger-router-controller: Employer
+  /api/v1/WorkplaceGivingPartner/EnrolledEmployers:
+    get:
+      tags:
+      - WorkplaceGivingPartner
+      summary: "Retrieve a list of employers, which originated from your payroll system,\
+        \ with at least one enrolled employee."
+      operationId: apiV1WorkplaceGivingPartnerEnrolledEmployersGET
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OriginationSiteEnrolledEmployersGetResponse'
+        "400":
+          description: The request is bad or an error has occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OriginationSiteEnrolledEmployersGetResponse'
+        "404":
+          description: No enrolled employers.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OriginationSiteEnrolledEmployersGetResponse'
+      x-swagger-router-controller: WorkplaceGivingPartner
+  /api/v1/WorkplaceGivingPartner/GivingData:
+    get:
+      tags:
+      - WorkplaceGivingPartner
+      summary: Retrieve summarized data across all enrolled employers that originated
+        from your payroll system.
+      operationId: apiV1WorkplaceGivingPartnerGivingDataGET
+      responses:
+        "200":
+          description: Success
+        "400":
+          description: The request is bad or an error has occurred.
+        "404":
+          description: No enrolled employers.
+      x-swagger-router-controller: WorkplaceGivingPartner
+  /api/v1/WorkplaceGivingPartner/EncryptAPIPrivateKey:
+    post:
+      tags:
+      - WorkplaceGivingPartner
+      operationId: apiV1WorkplaceGivingPartnerEncryptAPIPrivateKeyPOST
+      parameters:
+      - name: privateKey
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+      x-swagger-router-controller: WorkplaceGivingPartner
+components:
+  schemas:
+    CharitiesSearchRequest:
+      type: object
+      properties:
+        searchKey:
+          type: string
+          description: This string value will be to be searched for in the charity
+            name and mission statement.
+          nullable: true
+        city:
+          type: string
+          description: Use this to filter by U.S. City.
+          nullable: true
+        stateID:
+          type: integer
+          description: Use this to filter by U.S. State.
+          format: int32
+        taxID:
+          type: string
+          description: Use this to filter by IRS Tax ID/EIN.
+          nullable: true
+        missionCategoryID:
+          type: integer
+          description: Use the Mission Categories for Search API to obtain valid missionCategoryID
+            values and then submit here to filter by Mission Category.
+          format: int32
+      additionalProperties: false
+    CharityDataSearchResponse:
+      type: object
+      properties:
+        searchResult:
+          type: object
+          additionalProperties: false
+          nullable: true
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        searchResult: {}
+        resultCode: 0
+        resultMessage: resultMessage
+    DonationAskLadderRequest:
+      type: object
+      properties:
+        originationSiteLookupID:
+          type: string
+          nullable: true
+        memberID:
+          type: string
+          nullable: true
+        winAmount:
+          type: number
+          format: double
+        cookieValue:
+          type: string
+          nullable: true
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        city:
+          type: string
+          nullable: true
+        stateAbbrev:
+          type: string
+          nullable: true
+        stateLongName:
+          type: string
+          nullable: true
+        countryAbbrev:
+          type: string
+          nullable: true
+        countryLongName:
+          type: string
+          nullable: true
+        userAccountID:
+          type: integer
+          format: int32
+      additionalProperties: false
+    CreateConstituentRequest:
+      type: object
+      properties:
+        constituentIDFromAPI:
+          type: integer
+          format: int32
+        originationSiteLookupID:
+          type: string
+          nullable: true
+        memberID:
+          type: string
+          nullable: true
+        keyName:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        emailAddress:
+          type: string
+          nullable: true
+        doNotEmail:
+          type: boolean
+        donationAskID:
+          type: integer
+          format: int32
+        changeAgentID:
+          type: integer
+          format: int32
+      additionalProperties: false
+    CreateDonationRequest:
+      type: object
+      properties:
+        originationSiteLookupID:
+          type: string
+          nullable: true
+        memberID:
+          type: string
+          nullable: true
+        charityID:
+          type: integer
+          format: int32
+        constituentID:
+          type: integer
+          format: int32
+        keyName:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        emailAddress:
+          type: string
+          nullable: true
+        pin:
+          type: integer
+          format: int32
+        doNotEmail:
+          type: boolean
+        donorToCoverFees:
+          type: boolean
+        donationAskID:
+          type: integer
+          format: int32
+        donationAmount:
+          type: number
+          format: double
+        changeAgentID:
+          type: integer
+          format: int32
+        requestUrl:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CreditCardDonationRequest:
+      type: object
+      properties:
+        charityID:
+          type: integer
+          format: int32
+        constituentID:
+          type: integer
+          format: int32
+        keyName:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        emailAddress:
+          type: string
+          nullable: true
+        doNotEmail:
+          type: boolean
+        donorToCoverFees:
+          type: boolean
+        donationAskID:
+          type: integer
+          format: int32
+        donationAmount:
+          type: number
+          format: double
+        changeAgentID:
+          type: integer
+          format: int32
+        requestUrl:
+          type: string
+          nullable: true
+        charityName:
+          type: string
+          nullable: true
+        paymentMethodId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    Split:
+      type: object
+      properties:
+        donationAskID:
+          type: integer
+          format: int32
+        charityID:
+          type: integer
+          format: int32
+        donationSplitAmount:
+          type: number
+          format: double
+      additionalProperties: false
+    SplitDonationRequest:
+      type: object
+      properties:
+        constituentID:
+          type: integer
+          format: int32
+        keyName:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        middleName:
+          type: string
+          nullable: true
+        emailAddress:
+          type: string
+          nullable: true
+        totalGiftAmount:
+          type: number
+          format: double
+        doNotEmail:
+          type: boolean
+        donorToCoverFees:
+          type: boolean
+        paymentMethodID:
+          type: string
+          nullable: true
+        splits:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Split'
+        requestUrl:
+          type: string
+          nullable: true
+        changeAgentID:
+          type: integer
+          format: int32
+      additionalProperties: false
+    EmployeeCreateRequest:
+      required:
+      - employee_First_Name
+      - employee_Last_Name
+      - employee_Work_Email
+      - employer_AltruityID_Or_UniqueID
+      - payrollSchedule_AltruityID_Or_UniqueID
+      - unique_ID
+      type: object
+      properties:
+        unique_ID:
+          type: string
+        employee_First_Name:
+          type: string
+        employee_Last_Name:
+          type: string
+        employee_Job_Title:
+          type: string
+          nullable: true
+        employee_Phone:
+          type: string
+          nullable: true
+        employee_Personal_Email:
+          type: string
+          nullable: true
+        employee_Work_Email:
+          type: string
+        employer_AltruityID_Or_UniqueID:
+          type: string
+        payrollSchedule_AltruityID_Or_UniqueID:
+          type: string
+      additionalProperties: false
+    EmployeeCreateResponse:
+      type: object
+      properties:
+        employee_AltruityID:
+          type: integer
+          format: int32
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        employee_AltruityID: 0
+        resultCode: 6
+        resultMessage: resultMessage
+    EmployeeUpdateRequest:
+      required:
+      - employer_AltruityID_Or_UniqueID
+      type: object
+      properties:
+        employee_First_Name:
+          type: string
+          nullable: true
+        employee_Last_Name:
+          type: string
+          nullable: true
+        employee_Job_Title:
+          type: string
+          nullable: true
+        employee_Phone:
+          type: string
+          nullable: true
+        employee_Personal_Email:
+          type: string
+          nullable: true
+        employee_Work_Email:
+          type: string
+          nullable: true
+        employer_AltruityID_Or_UniqueID:
+          type: string
+        payrollSchedule_AltruityID_Or_UniqueID:
+          type: string
+          nullable: true
+      additionalProperties: false
+    EmployeeUpdateResponse:
+      type: object
+      properties:
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        resultCode: 0
+        resultMessage: resultMessage
+    EmployeeGetResponse:
+      type: object
+      properties:
+        employee_AltruityID:
+          type: integer
+          format: int32
+        employee_UniqueID:
+          type: string
+          nullable: true
+        employee_First_Name:
+          type: string
+          nullable: true
+        employee_Last_Name:
+          type: string
+          nullable: true
+        employee_Job_Title:
+          type: string
+          nullable: true
+        employee_Phone:
+          type: string
+          nullable: true
+        employee_Personal_Email:
+          type: string
+          nullable: true
+        employee_Work_Email:
+          type: string
+          nullable: true
+        employee_WorkplaceGiving_IsEnrolled:
+          type: string
+          nullable: true
+        employee_WorkplaceGiving_DeductionAmt:
+          type: string
+          nullable: true
+        employee_WorkplaceGiving_StartDate:
+          type: string
+          nullable: true
+        employee_WorkplaceGiving_EndDate:
+          type: string
+          nullable: true
+        employer_AltruityID:
+          type: integer
+          format: int32
+        employer_UniqueID:
+          type: string
+          nullable: true
+        payrollSchedule_AltruityID:
+          type: integer
+          format: int32
+        payrollSchedule_UniqueID:
+          type: string
+          nullable: true
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        employee_UniqueID: employee_UniqueID
+        employee_Personal_Email: employee_Personal_Email
+        payrollSchedule_UniqueID: payrollSchedule_UniqueID
+        employee_WorkplaceGiving_EndDate: employee_WorkplaceGiving_EndDate
+        employer_UniqueID: employer_UniqueID
+        employee_AltruityID: 0
+        resultCode: 5
+        employer_AltruityID: 6
+        employee_Last_Name: employee_Last_Name
+        resultMessage: resultMessage
+        employee_Job_Title: employee_Job_Title
+        employee_WorkplaceGiving_DeductionAmt: employee_WorkplaceGiving_DeductionAmt
+        employee_Phone: employee_Phone
+        employee_WorkplaceGiving_StartDate: employee_WorkplaceGiving_StartDate
+        employee_First_Name: employee_First_Name
+        employee_Work_Email: employee_Work_Email
+        employee_WorkplaceGiving_IsEnrolled: employee_WorkplaceGiving_IsEnrolled
+        payrollSchedule_AltruityID: 1
+    EmployeeDeleteResponse:
+      type: object
+      properties:
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        resultCode: 0
+        resultMessage: resultMessage
+    DonationBasket:
+      required:
+      - altruityCharityID
+      - donationAmount
+      type: object
+      properties:
+        altruityCharityID:
+          type: integer
+          format: int32
+        donationAmount:
+          type: number
+          format: double
+      additionalProperties: false
+    EmployeeDonationBasketCreateRequest:
+      required:
+      - donationBasket
+      - employee_DonationBasket_EffDate
+      - employer_AltruityID_Or_UniqueID
+      type: object
+      properties:
+        employer_AltruityID_Or_UniqueID:
+          type: string
+        employee_DonationBasket_EffDate:
+          type: string
+        donationBasket:
+          type: array
+          items:
+            $ref: '#/components/schemas/DonationBasket'
+      additionalProperties: false
+    EmployeeDonationBasketCreateResponse:
+      type: object
+      properties:
+        donationBasket_AltruityID:
+          type: integer
+          format: int32
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        donationBasket_AltruityID: 0
+        resultCode: 6
+        resultMessage: resultMessage
+    DonationBasketDetail:
+      type: object
+      properties:
+        altruityCharityID:
+          type: integer
+          format: int32
+        charityName:
+          type: string
+          nullable: true
+        donationAmount:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        altruityCharityID: 1
+        charityName: charityName
+        donationAmount: donationAmount
+    EmployeeDonationBasketGetResponse:
+      type: object
+      properties:
+        donationBasket_AltruityID:
+          type: integer
+          format: int32
+        employee_AltruityID:
+          type: integer
+          format: int32
+        employee_UniqueID:
+          type: string
+          nullable: true
+        employee_DonationBasket_EffDate:
+          type: string
+          nullable: true
+        employee_DonationBasket_EndDate:
+          type: string
+          nullable: true
+        employee_DonationBasket_TotalAmount:
+          type: string
+          nullable: true
+        donationBasket:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/DonationBasketDetail'
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        employee_UniqueID: employee_UniqueID
+        employee_DonationBasket_EffDate: employee_DonationBasket_EffDate
+        employee_DonationBasket_TotalAmount: employee_DonationBasket_TotalAmount
+        employee_DonationBasket_EndDate: employee_DonationBasket_EndDate
+        donationBasket_AltruityID: 0
+        employee_AltruityID: 6
+        resultCode: 5
+        donationBasket:
+        - altruityCharityID: 1
+          charityName: charityName
+          donationAmount: donationAmount
+        - altruityCharityID: 1
+          charityName: charityName
+          donationAmount: donationAmount
+        resultMessage: resultMessage
+    EmployeeDonationBasketDeleteResponse:
+      type: object
+      properties:
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        resultCode: 0
+        resultMessage: resultMessage
+    PayrollAdminCreateRequest:
+      required:
+      - email
+      - first_Name
+      - last_Name
+      - unique_ID
+      type: object
+      properties:
+        unique_ID:
+          type: string
+        first_Name:
+          type: string
+        last_Name:
+          type: string
+        job_Title:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        email:
+          type: string
+      additionalProperties: false
+    PayrollScheduleCreateRequest:
+      required:
+      - frequency
+      - next_Pay_Date
+      - unique_ID
+      type: object
+      properties:
+        unique_ID:
+          type: string
+        schedule_Name:
+          type: string
+          nullable: true
+        frequency:
+          type: string
+        next_Pay_Date:
+          type: string
+        bimonthly_Pay_Date1:
+          type: string
+          nullable: true
+          default: "0"
+        bimonthly_Pay_Date2:
+          type: string
+          nullable: true
+          default: "0"
+      additionalProperties: false
+    EmployerCreateRequest:
+      required:
+      - employer_Name
+      - mailing_City
+      - mailing_Country
+      - mailing_PostalCode
+      - mailing_State
+      - mailing_Street1
+      - pay_Schedules
+      - payroll_Admin
+      - phone
+      - unique_ID
+      type: object
+      properties:
+        employer_Name:
+          type: string
+        unique_ID:
+          type: string
+        employer_Status:
+          type: string
+          nullable: true
+        ein:
+          type: string
+          nullable: true
+        phone:
+          type: string
+        physical_Street1:
+          type: string
+          nullable: true
+        physical_Street2:
+          type: string
+          nullable: true
+        physical_City:
+          type: string
+          nullable: true
+        physical_State:
+          type: string
+          nullable: true
+        physical_PostalCode:
+          type: string
+          nullable: true
+        physical_Country:
+          type: string
+          nullable: true
+        mailing_Street1:
+          type: string
+        mailing_Street2:
+          type: string
+          nullable: true
+        mailing_City:
+          type: string
+        mailing_State:
+          type: string
+        mailing_PostalCode:
+          type: string
+        mailing_Country:
+          type: string
+        payroll_Admin:
+          allOf:
+          - $ref: '#/components/schemas/PayrollAdminCreateRequest'
+        pay_Schedules:
+          type: array
+          items:
+            $ref: '#/components/schemas/PayrollScheduleCreateRequest'
+      additionalProperties: false
+    EmployerCreateResponse:
+      type: object
+      properties:
+        employer_AltruityID:
+          type: integer
+          format: int32
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        resultCode: 6
+        employer_AltruityID: 0
+        resultMessage: resultMessage
+    EmployerUpdateRequest:
+      type: object
+      properties:
+        employer_Name:
+          type: string
+          nullable: true
+        employer_Status:
+          type: string
+          nullable: true
+        ein:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        physical_Street1:
+          type: string
+          nullable: true
+        physical_Street2:
+          type: string
+          nullable: true
+        physical_City:
+          type: string
+          nullable: true
+        physical_State:
+          type: string
+          nullable: true
+        physical_PostalCode:
+          type: string
+          nullable: true
+        physical_Country:
+          type: string
+          nullable: true
+        mailing_Street1:
+          type: string
+          nullable: true
+        mailing_Street2:
+          type: string
+          nullable: true
+        mailing_City:
+          type: string
+          nullable: true
+        mailing_State:
+          type: string
+          nullable: true
+        mailing_PostalCode:
+          type: string
+          nullable: true
+        mailing_Country:
+          type: string
+          nullable: true
+        payroll_Admin:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PayrollAdminCreateRequest'
+      additionalProperties: false
+    BaseEmployerResponse:
+      type: object
+      properties:
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        resultCode: 0
+        resultMessage: resultMessage
+    PayrollAdmin:
+      type: object
+      properties:
+        altruityID:
+          type: integer
+          format: int32
+        uniqueID:
+          type: string
+          nullable: true
+        first_Name:
+          type: string
+          nullable: true
+        last_Name:
+          type: string
+          nullable: true
+        job_Title:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+      additionalProperties: false
+    EmployerGetResponse:
+      type: object
+      properties:
+        employer_AltruityID:
+          type: integer
+          format: int32
+        employer_UniqueID:
+          type: string
+          nullable: true
+        employer_Name:
+          type: string
+          nullable: true
+        employer_Status:
+          type: string
+          nullable: true
+        ein:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        physical_Street1:
+          type: string
+          nullable: true
+        physical_Street2:
+          type: string
+          nullable: true
+        physical_City:
+          type: string
+          nullable: true
+        physical_State:
+          type: string
+          nullable: true
+        physical_PostalCode:
+          type: string
+          nullable: true
+        physical_Country:
+          type: string
+          nullable: true
+        mailing_Street1:
+          type: string
+          nullable: true
+        mailing_Street2:
+          type: string
+          nullable: true
+        mailing_City:
+          type: string
+          nullable: true
+        mailing_State:
+          type: string
+          nullable: true
+        mailing_PostalCode:
+          type: string
+          nullable: true
+        mailing_Country:
+          type: string
+          nullable: true
+        payroll_Admin:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PayrollAdmin'
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        mailing_PostalCode: mailing_PostalCode
+        physical_Street1: physical_Street1
+        physical_Street2: physical_Street2
+        mailing_State: mailing_State
+        employer_UniqueID: employer_UniqueID
+        resultCode: 6
+        physical_PostalCode: physical_PostalCode
+        employer_AltruityID: 0
+        physical_State: physical_State
+        physical_Country: physical_Country
+        ein: ein
+        mailing_Country: mailing_Country
+        resultMessage: resultMessage
+        physical_City: physical_City
+        mailing_City: mailing_City
+        payroll_Admin: ""
+        phone: phone
+        employer_Name: employer_Name
+        employer_Status: employer_Status
+        mailing_Street1: mailing_Street1
+        mailing_Street2: mailing_Street2
+    PayrollAdminCreateResponse:
+      type: object
+      properties:
+        payroll_Admin_AltruityID:
+          type: integer
+          format: int32
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        payroll_Admin_AltruityID: 0
+        resultCode: 6
+        resultMessage: resultMessage
+    PayrollAdminUpdateRequest:
+      type: object
+      properties:
+        first_Name:
+          type: string
+          nullable: true
+        last_Name:
+          type: string
+          nullable: true
+        job_Title:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+      additionalProperties: false
+    PayrollAdminUpdateResponse:
+      type: object
+      properties:
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        resultCode: 0
+        resultMessage: resultMessage
+    PayrollAdminGetResponse:
+      type: object
+      properties:
+        payroll_Admin_AltruityID:
+          type: integer
+          format: int32
+        payroll_Admin_UniqueID:
+          type: string
+          nullable: true
+        first_Name:
+          type: string
+          nullable: true
+        last_Name:
+          type: string
+          nullable: true
+        unique_ID:
+          type: string
+          nullable: true
+        job_Title:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        employer_Altruity_ID:
+          type: integer
+          format: int32
+        employer_Unique_ID:
+          type: string
+          nullable: true
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        payroll_Admin_AltruityID: 0
+        employer_Unique_ID: employer_Unique_ID
+        payroll_Admin_UniqueID: payroll_Admin_UniqueID
+        first_Name: first_Name
+        unique_ID: unique_ID
+        phone: phone
+        employer_Altruity_ID: 6
+        resultCode: 1
+        last_Name: last_Name
+        resultMessage: resultMessage
+        job_Title: job_Title
+        email: email
+    PayrollAdminDeleteResponse:
+      type: object
+      properties:
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        resultCode: 0
+        resultMessage: resultMessage
+    PayrollScheduleCreateResponse:
+      type: object
+      properties:
+        payroll_Schedule_AltruityID:
+          type: integer
+          format: int32
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        resultCode: 6
+        resultMessage: resultMessage
+        payroll_Schedule_AltruityID: 0
+    PayrollScheduleUpdateRequest:
+      type: object
+      properties:
+        schedule_Name:
+          type: string
+          nullable: true
+        frequency:
+          type: string
+          nullable: true
+        next_Pay_Date:
+          type: string
+          nullable: true
+        bimonthly_Pay_Date1:
+          type: string
+          nullable: true
+        bimonthly_Pay_Date2:
+          type: string
+          nullable: true
+      additionalProperties: false
+    PayrollScheduleUpdateResponse:
+      type: object
+      properties:
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        resultCode: 0
+        resultMessage: resultMessage
+    PayrollScheduleGetResponse:
+      type: object
+      properties:
+        payroll_Schedule_AltruityID:
+          type: integer
+          format: int32
+        payroll_Schedule_UniqueID:
+          type: string
+          nullable: true
+        payroll_Schedule_Name:
+          type: string
+          nullable: true
+        altruity_Frequency:
+          type: string
+          nullable: true
+        biMonthlyPay_Day1:
+          type: integer
+          format: int32
+        biMonthlyPay_Day2:
+          type: integer
+          format: int32
+        initial_Cycle_StartDate:
+          type: string
+          nullable: true
+        employer_Altruity_ID:
+          type: integer
+          format: int32
+        employer_Unique_ID:
+          type: string
+          nullable: true
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        payroll_Schedule_UniqueID: payroll_Schedule_UniqueID
+        initial_Cycle_StartDate: initial_Cycle_StartDate
+        payroll_Schedule_Name: payroll_Schedule_Name
+        employer_Unique_ID: employer_Unique_ID
+        employer_Altruity_ID: 5
+        altruity_Frequency: altruity_Frequency
+        resultCode: 5
+        resultMessage: resultMessage
+        payroll_Schedule_AltruityID: 0
+        biMonthlyPay_Day1: 6
+        biMonthlyPay_Day2: 1
+    PayrollScheduleDeleteResponse:
+      type: object
+      properties:
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        resultCode: 0
+        resultMessage: resultMessage
+    EmployerEmployeesGetResponse:
+      type: object
+      properties:
+        employees:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/EmployeeGetResponse'
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        resultCode: 0
+        employees:
+        - employee_UniqueID: employee_UniqueID
+          employee_Personal_Email: employee_Personal_Email
+          payrollSchedule_UniqueID: payrollSchedule_UniqueID
+          employee_WorkplaceGiving_EndDate: employee_WorkplaceGiving_EndDate
+          employer_UniqueID: employer_UniqueID
+          employee_AltruityID: 0
+          resultCode: 5
+          employer_AltruityID: 6
+          employee_Last_Name: employee_Last_Name
+          resultMessage: resultMessage
+          employee_Job_Title: employee_Job_Title
+          employee_WorkplaceGiving_DeductionAmt: employee_WorkplaceGiving_DeductionAmt
+          employee_Phone: employee_Phone
+          employee_WorkplaceGiving_StartDate: employee_WorkplaceGiving_StartDate
+          employee_First_Name: employee_First_Name
+          employee_Work_Email: employee_Work_Email
+          employee_WorkplaceGiving_IsEnrolled: employee_WorkplaceGiving_IsEnrolled
+          payrollSchedule_AltruityID: 1
+        - employee_UniqueID: employee_UniqueID
+          employee_Personal_Email: employee_Personal_Email
+          payrollSchedule_UniqueID: payrollSchedule_UniqueID
+          employee_WorkplaceGiving_EndDate: employee_WorkplaceGiving_EndDate
+          employer_UniqueID: employer_UniqueID
+          employee_AltruityID: 0
+          resultCode: 5
+          employer_AltruityID: 6
+          employee_Last_Name: employee_Last_Name
+          resultMessage: resultMessage
+          employee_Job_Title: employee_Job_Title
+          employee_WorkplaceGiving_DeductionAmt: employee_WorkplaceGiving_DeductionAmt
+          employee_Phone: employee_Phone
+          employee_WorkplaceGiving_StartDate: employee_WorkplaceGiving_StartDate
+          employee_First_Name: employee_First_Name
+          employee_Work_Email: employee_Work_Email
+          employee_WorkplaceGiving_IsEnrolled: employee_WorkplaceGiving_IsEnrolled
+          payrollSchedule_AltruityID: 1
+        resultMessage: resultMessage
+    EmployerGivingDataGetResponse:
+      type: object
+      properties:
+        activeDonors:
+          type: integer
+          format: int32
+        ytdGiving:
+          type: string
+          nullable: true
+        lifetimeGiving:
+          type: string
+          nullable: true
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        activeDonors: 0
+        ytdGiving: ytdGiving
+        lifetimeGiving: lifetimeGiving
+        resultCode: 6
+        resultMessage: resultMessage
+    LoginRequestModel:
+      required:
+      - password
+      - username
+      type: object
+      properties:
+        username:
+          pattern: "^(([^<>()[\\]\\\\.,;:\\s@\"]+(\\.[^<>()[\\]\\\\.,;:\\s@\"]+)*)|(\"\
+            .+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\\
+            -0-9]+\\.)+[a-zA-Z]{2,}))$"
+          type: string
+          format: email
+        password:
+          pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\da-zA-Z]).{8,40}$"
+          type: string
+          format: password
+      additionalProperties: false
+    SignUpRequestModel:
+      required:
+      - confirmPassword
+      - email
+      - firstName
+      - lastName
+      - password
+      type: object
+      properties:
+        email:
+          pattern: "^(([^<>()[\\]\\\\.,;:\\s@\"]+(\\.[^<>()[\\]\\\\.,;:\\s@\"]+)*)|(\"\
+            .+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\\
+            -0-9]+\\.)+[a-zA-Z]{2,}))$"
+          type: string
+          format: email
+        password:
+          pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\da-zA-Z]).{8,40}$"
+          type: string
+          format: password
+        confirmPassword:
+          pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\da-zA-Z]).{8,40}$"
+          type: string
+          format: password
+        firstName:
+          type: string
+        lastName:
+          type: string
+      additionalProperties: false
+    EmailRequestModel:
+      required:
+      - email
+      type: object
+      properties:
+        email:
+          pattern: "^(([^<>()[\\]\\\\.,;:\\s@\"]+(\\.[^<>()[\\]\\\\.,;:\\s@\"]+)*)|(\"\
+            .+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\\
+            -0-9]+\\.)+[a-zA-Z]{2,}))$"
+          type: string
+          format: email
+      additionalProperties: false
+    ResetPasswordRequest:
+      required:
+      - confirmPassword
+      - password
+      - token
+      - userAccountID
+      type: object
+      properties:
+        userAccountID:
+          type: integer
+          format: int64
+        token:
+          type: string
+        password:
+          pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\da-zA-Z]).{8,40}$"
+          type: string
+          format: password
+        confirmPassword:
+          pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\da-zA-Z]).{8,40}$"
+          type: string
+          format: password
+      additionalProperties: false
+    ChangePasswordRequest:
+      required:
+      - confirmPassword
+      - currentPassword
+      - newPassword
+      - userAccountID
+      type: object
+      properties:
+        userAccountID:
+          type: integer
+          format: int64
+        currentPassword:
+          type: string
+        newPassword:
+          pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\da-zA-Z]).{8,40}$"
+          type: string
+          format: password
+        confirmPassword:
+          pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\da-zA-Z]).{8,40}$"
+          type: string
+          format: password
+      additionalProperties: false
+    DonationHistoryRequest:
+      type: object
+      properties:
+        userAccountID:
+          type: integer
+          format: int64
+        sortValue:
+          type: integer
+          format: int32
+      additionalProperties: false
+    UserDetailsEditRequest:
+      type: object
+      properties:
+        userAccountID:
+          type: integer
+          format: int64
+        email:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        remainAnonymous:
+          type: integer
+          format: int32
+        coverfees:
+          type: integer
+          format: int32
+        favoriteCharities:
+          type: string
+          nullable: true
+      additionalProperties: false
+    OutsideLogEditRequest:
+      type: object
+      properties:
+        donationID:
+          type: integer
+          format: int32
+        donationDate:
+          type: string
+          format: date-time
+        charityName:
+          type: string
+          nullable: true
+        charityTaxID:
+          type: string
+          nullable: true
+        donationAmount:
+          type: number
+          format: double
+        comment:
+          type: string
+          nullable: true
+        userAccountID:
+          type: integer
+          format: int64
+        file:
+          type: string
+          format: binary
+          nullable: true
+        docName:
+          type: string
+          nullable: true
+        receiptFileStorageName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    OutsideLogReceiptManagementRequest:
+      type: object
+      properties:
+        donationID:
+          type: integer
+          format: int32
+        receiptActionCode:
+          type: integer
+          format: int32
+      additionalProperties: false
+    OutsideRecurringLogAddRequest:
+      type: object
+      properties:
+        donationID:
+          type: integer
+          format: int32
+        frequencyCode:
+          type: integer
+          format: int32
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        charityName:
+          type: string
+          nullable: true
+        charityTaxID:
+          type: string
+          nullable: true
+        donationAmount:
+          type: number
+          format: double
+        comment:
+          type: string
+          nullable: true
+        userAccountID:
+          type: integer
+          format: int64
+      additionalProperties: false
+    OutsideRecurringLogEditRequest:
+      type: object
+      properties:
+        recurringGiftID:
+          type: integer
+          format: int32
+        userAccountID:
+          type: integer
+          format: int64
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        charityName:
+          type: string
+          nullable: true
+        charityTaxID:
+          type: string
+          nullable: true
+        comment:
+          type: string
+          nullable: true
+      additionalProperties: false
+    OutsideRecurringLogEditPaymentRequest:
+      type: object
+      properties:
+        donationID:
+          type: integer
+          format: int32
+        recurringGiftID:
+          type: integer
+          format: int32
+        userAccountID:
+          type: integer
+          format: int64
+        donationDate:
+          type: string
+          format: date-time
+        donationAmount:
+          type: number
+          format: double
+        comment:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DonationHistoryReceiptRequest:
+      type: object
+      properties:
+        userAccountID:
+          type: integer
+          format: int32
+        donationID:
+          type: integer
+          format: int32
+      additionalProperties: false
+    GivingGoalRequest:
+      type: object
+      properties:
+        calendarYear:
+          type: integer
+          format: int32
+        filingStatusCode:
+          type: integer
+          format: int32
+        taxesItemized:
+          type: integer
+          format: int32
+        householdIncome:
+          type: number
+          format: double
+      additionalProperties: false
+    AddGivingGoalRequest:
+      type: object
+      properties:
+        userAccountID:
+          type: integer
+          format: int64
+        calendarYear:
+          type: integer
+          format: int32
+        createdByWizard:
+          type: integer
+          format: int32
+        givingGoal:
+          type: number
+          format: double
+        filingStatusCode:
+          type: integer
+          format: int32
+        taxesItemized:
+          type: integer
+          format: int32
+        changeAgentID:
+          type: integer
+          format: int32
+        householdIncome:
+          type: number
+          format: double
+      additionalProperties: false
+    CsvExportRequest:
+      type: object
+      properties:
+        userAccountID:
+          type: integer
+          format: int64
+        yearChoice:
+          type: integer
+          format: int32
+      additionalProperties: false
+    EnrolledEmployers:
+      type: object
+      properties:
+        employer_AltruityID:
+          type: string
+          nullable: true
+        employer_UniqueID:
+          type: string
+          nullable: true
+        employer_Name:
+          type: string
+          nullable: true
+        enrolledEmployeeCount:
+          type: integer
+          format: int32
+        donationCount:
+          type: integer
+          format: int32
+        ytdGiving:
+          type: string
+          nullable: true
+        lifetimeGiving:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        ytdGiving: ytdGiving
+        lifetimeGiving: lifetimeGiving
+        donationCount: 6
+        employer_UniqueID: employer_UniqueID
+        employer_Name: employer_Name
+        employer_AltruityID: employer_AltruityID
+        enrolledEmployeeCount: 0
+    OriginationSiteEnrolledEmployersGetResponse:
+      type: object
+      properties:
+        enrolled_Employers:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/EnrolledEmployers'
+        resultCode:
+          type: integer
+          format: int32
+        resultMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+      example:
+        resultCode: 1
+        enrolled_Employers:
+        - ytdGiving: ytdGiving
+          lifetimeGiving: lifetimeGiving
+          donationCount: 6
+          employer_UniqueID: employer_UniqueID
+          employer_Name: employer_Name
+          employer_AltruityID: employer_AltruityID
+          enrolledEmployeeCount: 0
+        - ytdGiving: ytdGiving
+          lifetimeGiving: lifetimeGiving
+          donationCount: 6
+          employer_UniqueID: employer_UniqueID
+          employer_Name: employer_Name
+          employer_AltruityID: employer_AltruityID
+          enrolledEmployeeCount: 0
+        resultMessage: resultMessage
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: "JWT Authorization header using the Bearer scheme. \\r\\n\\r\\\
+        n \r\n                        Enter 'Bearer' [space] and then your token in\
+        \ the text input below.\r\n                        \\r\\n\\r\\nExample: 'Bearer\
+        \ 12345abcdef'"
+      name: Authorization
+      in: header
+    Basic:
+      type: apiKey
+      description: EmployerId:Secret 64 based encoded.
+      name: Authorization
+      in: header
+    Donate:
+      type: apiKey
+      description: Access token
+      name: ApiKey
+      in: header
